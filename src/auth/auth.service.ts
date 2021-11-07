@@ -31,7 +31,7 @@ export class AuthService {
         );
       }
       throw new HttpException(
-        'Something went wrong',
+        `${error}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

@@ -13,7 +13,7 @@ export class registerDto {
 
   @IsNotEmpty()
   @MinLength(8)
-  @Matches(/^(?=.*[A-Za-z])(?=.*d)[A-Za-zd]{8,}$/, {message: 'Password too weak'})
+  //todo матч переделать
   password: string;
 }
 

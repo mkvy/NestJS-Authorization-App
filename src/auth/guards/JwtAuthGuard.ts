@@ -18,7 +18,6 @@ export class JwtAuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    //todo разобраться с контекстом
     const request = context.switchToHttp().getRequest();
     const authorizationHeader = request.header('Authorization');
     if (!authorizationHeader) {
@@ -32,6 +31,7 @@ export class JwtAuthGuard implements CanActivate {
     const payload = this.jwtService.verify(accessToken, {
       secret: jwtContants.secret,
     });
+    //todo словить ошибку 500
     if (!payload) {
       throw new HttpException('Access denied', HttpStatus.FORBIDDEN);
     }
