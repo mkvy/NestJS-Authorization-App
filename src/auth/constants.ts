@@ -1,8 +1,7 @@
 export const jwtContants = {
-  secret: 'verySecret',
+  secret: process.env.JWT_SECRET,
 };
 enum PostgresErrorCode {
   UniqueViolation = '23505',
 }
-//todo убрать в другой файл
 export default PostgresErrorCode;

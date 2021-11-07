@@ -30,11 +30,28 @@ export class AuthService {
           HttpStatus.BAD_REQUEST,
         );
       }
-      //todo валидация почты и пароля
       throw new HttpException(
         'Something went wrong',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  async authorize(authData: registerDto) {
+    const access_token = this.jwtService.sign({
+      email: authData.email,
+    });
+    const user = await this.usersService.getByEmail(authData.email);
+    if (!user) {
+      throw new HttpException('Wrong credentials', HttpStatus.BAD_REQUEST);
+    }
+    const isPasswordMatching = await bcrypt.compare(
+      authData.password,
+      user.password,
+    );
+    if (!isPasswordMatching) {
+      throw new HttpException('Wrong credentials', HttpStatus.BAD_REQUEST);
+    }
+    return access_token;
   }
 }
