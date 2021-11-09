@@ -1,8 +1,8 @@
 {
   "name": "us-test-project",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Nest JS project for US test task",
+  "author": "Pavel Makovetsky",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
