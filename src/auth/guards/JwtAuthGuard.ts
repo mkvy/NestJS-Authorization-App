@@ -49,11 +49,10 @@ export class JwtAuthGuard implements CanActivate {
     if (!payload) {
       throw new HttpException('Access denied', HttpStatus.FORBIDDEN);
     }
-    try {
-      await this.usersService.getByEmail(payload.toString());
-      return true;
-    } catch {
+    const userByEmail = await this.usersService.getByEmail(payload.email);
+    if (!userByEmail) {
       throw new HttpException('Access denied', HttpStatus.FORBIDDEN);
     }
+    return true;
   }
 }
