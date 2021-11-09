@@ -27,19 +27,32 @@ export class JwtAuthGuard implements CanActivate {
     if (prefix !== 'Bearer') {
       throw new HttpException('Access denied', HttpStatus.FORBIDDEN);
     }
-
-    const payload = this.jwtService.verify(accessToken, {
-      secret: jwtContants.secret,
-    });
+    let payload = undefined;
+    try {
+      payload = this.jwtService.verify(accessToken, {
+        secret: jwtContants.secret,
+      });
+    } catch (e) {
+      throw new HttpException('Access denied', HttpStatus.FORBIDDEN);
+    }
     //todo словить ошибку 500
+    /*
+    const payload = async () => {
+      try {
+        return this.jwtService.verify(accessToken, {
+          secret: jwtContants.secret,
+        });
+      } catch (e) {
+        return undefined;
+      }
+    };*/
     if (!payload) {
       throw new HttpException('Access denied', HttpStatus.FORBIDDEN);
     }
     try {
-      await this.usersService.getByEmail(payload);
+      await this.usersService.getByEmail(payload.toString());
       return true;
     } catch {
-      //todo проверить момент с 404
       throw new HttpException('Access denied', HttpStatus.FORBIDDEN);
     }
   }

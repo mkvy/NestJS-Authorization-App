@@ -13,7 +13,7 @@ export class registerDto {
 
   @IsNotEmpty()
   @MinLength(8)
-  //todo матч переделать
+  @Matches(/^((?!.*[\s])(?=.*[A-Za-z])(?=.*\d).{8,})/, {message: "Пароль слишком слабый. Должен содержать минимум 1 цифру и быть длиной более 8 символов."})
   password: string;
 }
 
