@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -18,13 +16,11 @@ import { ConfigModule } from '@nestjs/config';
       type: 'postgres',
       host: 'postgresql',
       port: 5432,
-      username: `${process.env.DATABASE_USER}`,
-      password: `${process.env.DATABASE_PWD}`,
+      username: process.env.DATABASE_USER as string,
+      password: process.env.DATABASE_PWD as string,
       entities: [join(__dirname, '**', '*.entity.{ts,js}')],
       synchronize: true,
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

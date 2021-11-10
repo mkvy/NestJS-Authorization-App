@@ -11,14 +11,15 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async create(userData: CreateUserDto) {
+  async create(userData: CreateUserDto): Promise<User> {
     const newUser = await this.usersRepository.create({
       ...userData,
     });
     await this.usersRepository.save(newUser);
     return newUser;
   }
-  async getByEmail(email: string) {
+
+  async getByEmail(email: string): Promise<User> {
     return await this.usersRepository.findOne({ email });
   }
 }

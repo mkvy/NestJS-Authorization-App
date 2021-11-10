@@ -1,8 +1,9 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import registerDto from './dto/register.dto';
+import { RegisterDto } from './dto/register.dto';
 import { UsersService } from '../users/users.service';
 import { JwtAuthGuard } from './guards/JwtAuthGuard';
+import { ResponseStatuses } from './auth.constants';
 
 @Controller('auth')
 export class AuthController {
@@ -13,13 +14,13 @@ export class AuthController {
 
   @HttpCode(200)
   @Post('signup')
-  async register(@Body() registrationData: registerDto) {
+  async register(@Body() registrationData: RegisterDto): Promise<string> {
     return await this.authService.register(registrationData);
   }
 
   @HttpCode(200)
   @Post('signin')
-  async authorize(@Body() authData: registerDto) {
+  async authorize(@Body() authData: RegisterDto): Promise<string> {
     return await this.authService.authorize(authData);
   }
 
@@ -27,6 +28,6 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Post('tokenAuth')
   async tokenAuth() {
-    return 'Ok';
+    return ResponseStatuses.OK;
   }
 }

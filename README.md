@@ -4,7 +4,7 @@
 Выполнено с использованием фреймворка Nest JS.
 # Маршруты
 Контроллер принимает следующие запросы:
-- /auth/signup
+- POST /auth/signup
 
 По данному маршруту производится регистрация пользователя.
 Данные передаются POST запросом, тело запроса содержит JSON с полями "email": string, "password": string.
@@ -12,7 +12,7 @@
 В ответ возвращается JWT token в виде jwtHeader.jwtPayload.jwtSignature с кодом HTTP 200.
 Если данные не валидны, возвращается код HTTP 400.
 
-- /auth/signin
+- POST /auth/signin
 
 По данному маршруту производится авторизация пользователя.
 Данные передаются POST запросом, тело запроса содержит JSON с полями "email": string, "password": string.
@@ -20,7 +20,7 @@
 В ответ возвращается JWT token в виде jwtHeader.jwtPayload.jwtSignature с кодом HTTP 200.
 Если данные не валидны, возвращается код HTTP 400.
 
-- /auth/tokenAuth
+- POST /auth/tokenAuth
 
 По данному маршруту производится поиск пользователя в БД.
 На вход передается токен доступа в виде HTTP заголовка: "Authorization: Bearer jwtHeader.jwtPayload.jwtSignature".

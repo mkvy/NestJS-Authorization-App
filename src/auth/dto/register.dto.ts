@@ -6,15 +6,13 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class registerDto {
+export class RegisterDto {
   @IsString()
   @IsEmail()
-  email: string;
+  email!: string;
 
   @IsNotEmpty()
   @MinLength(8)
   @Matches(/^((?!.*[\s])(?=.*[A-Za-z])(?=.*\d).{8,})/, {message: "Пароль слишком слабый. Должен содержать минимум 1 цифру и быть длиной более 8 символов."})
-  password: string;
+  password!: string;
 }
-
-export default registerDto;

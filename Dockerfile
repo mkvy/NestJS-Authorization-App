@@ -1,7 +1,7 @@
-FROM node:latest
+FROM node:14.18.1-alpine
 
 # Create app directory, this is in our container/in our image
-WORKDIR /thomas/src/app
+WORKDIR /usr/src/app
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied

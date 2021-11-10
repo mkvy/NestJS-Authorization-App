@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from '../../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { jwtContants } from '../constants';
+import { jwtContants } from '../auth.constants';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -35,17 +35,6 @@ export class JwtAuthGuard implements CanActivate {
     } catch (e) {
       throw new HttpException('Access denied', HttpStatus.FORBIDDEN);
     }
-    //todo словить ошибку 500
-    /*
-    const payload = async () => {
-      try {
-        return this.jwtService.verify(accessToken, {
-          secret: jwtContants.secret,
-        });
-      } catch (e) {
-        return undefined;
-      }
-    };*/
     if (!payload) {
       throw new HttpException('Access denied', HttpStatus.FORBIDDEN);
     }

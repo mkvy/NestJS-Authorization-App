@@ -1,18 +1,18 @@
 import { HttpException, HttpStatus, Injectable, Post } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import registerDto from './dto/register.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import PostgresErrorCode from './constants';
+import { RegisterDto } from "./dto/register.dto";
+import { PostgresErrorCode } from "./auth.constants";
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
-    private jwtService: JwtService,
+    private readonly jwtService: JwtService,
   ) {}
 
-  async register(registrationData: registerDto) {
+  async register(registrationData: RegisterDto): Promise<string> {
     const hashedPassword = await bcrypt.hash(registrationData.password, 10);
     try {
       const access_token = this.jwtService.sign({
@@ -37,7 +37,7 @@ export class AuthService {
     }
   }
 
-  async authorize(authData: registerDto) {
+  async authorize(authData: RegisterDto): Promise<string> {
     const access_token = this.jwtService.sign({
       email: authData.email,
     });
