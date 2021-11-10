@@ -18,4 +18,3 @@ export class registerDto {
 }
 
 export default registerDto;
-
