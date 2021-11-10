@@ -2,8 +2,7 @@ import { HttpException, HttpStatus, Injectable, Post } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { RegisterDto } from "./dto/register.dto";
-import { PostgresErrorCode } from "./auth.constants";
+import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -14,27 +13,17 @@ export class AuthService {
 
   async register(registrationData: RegisterDto): Promise<string> {
     const hashedPassword = await bcrypt.hash(registrationData.password, 10);
-    try {
-      const access_token = this.jwtService.sign({
-        email: registrationData.email,
-      });
-      const createdUser = await this.usersService.create({
-        ...registrationData,
-        password: hashedPassword,
-      });
-      return access_token;
-    } catch (error) {
-      if (error?.code === PostgresErrorCode.UniqueViolation) {
-        throw new HttpException(
-          'User with that email already exists',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-      throw new HttpException(
-        `${error}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+    const access_token = this.jwtService.sign({
+      email: registrationData.email,
+    });
+    const createdUser = await this.usersService.create({
+      ...registrationData,
+      password: hashedPassword,
+    });
+    if (!createdUser) {
+      throw new HttpException('Error creating user', HttpStatus.BAD_REQUEST)
     }
+    return access_token;
   }
 
   async authorize(authData: RegisterDto): Promise<string> {

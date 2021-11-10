@@ -6,7 +6,6 @@ import { jwtContants } from './auth.constants';
 import { AuthController } from "./auth.controller";
 
 @Module({
-  providers: [AuthService],
   imports: [
     UsersModule,
     JwtModule.register({
@@ -14,7 +13,8 @@ import { AuthController } from "./auth.controller";
       signOptions: { expiresIn: '2h' },
     }),
   ],
-  exports: [AuthService],
   controllers: [AuthController],
+  providers: [AuthService],
+  exports: [AuthService],
 })
 export class AuthModule {}
