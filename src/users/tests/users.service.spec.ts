@@ -1,50 +1,47 @@
 import { UsersService } from '../users.service';
-import { User } from '../user.entity';
-import { Test } from "@nestjs/testing";
-import { getRepositoryToken } from "@nestjs/typeorm";
-
+import { User, UsersRepositoryFake } from '../user.entity';
+import { Test } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import faker from 'faker';
+import exp from 'constants';
 
 describe('UsersService', () => {
   let usersService: UsersService;
-  let findOne: jest.Mock;
-
+  let usersRepository: Repository<User>;
   beforeEach(async () => {
-    findOne = jest.fn();
-    const module = await Test.createTestingModule(
-      {
-        providers: [UsersService,
-          {
-            provide: getRepositoryToken(User),
-            useValue: {
-              findOne,
-            },
-          }
-        ],
-      }).compile();
+    const module = await Test.createTestingModule({
+      providers: [
+        UsersService,
+        {
+          provide: getRepositoryToken(User),
+          useClass: UsersRepositoryFake,
+        },
+      ],
+    }).compile();
     usersService = await module.get(UsersService);
+    usersRepository = await module.get(getRepositoryToken(User));
   });
-  describe('when getting user by email', () => {
-    describe('and the user is matched', () => {
-      let user = {
-        id: '123',
+  describe('when creating a user', () => {
+    it('it should save and return user', async () => {
+      const createUserData = {
         email: 'test@test.com',
-        password: 'testtest123'
-      }
-      beforeEach(() =>  {
-        findOne.mockReturnValue(Promise.resolve(user));
-      })
-      it('should return the user', async () => {
-        const fetchedUser = await usersService.getByEmail('test@test.com');
-        expect(fetchedUser).toEqual(user);
-      })
-    })
-    describe('and the user is not matched', () => {
-      beforeEach(() => {
-        findOne.mockReturnValue(undefined);
-      })
-      it('should throw an error', async () => {
-        await expect(usersService.getByEmail('test@test.com')).rejects.toThrow();
-      })
-    })
-  })
+        password: 'password123',
+      };
+      const savedUserData = {
+        id: 123,
+        ...createUserData,
+      };
+      const usersRepositoryCreateSpy = jest
+        .spyOn(usersRepository, 'create')
+        .mockReturnValue(savedUserData);
+      const usersRepositorySaveSpy = jest
+        .spyOn(usersRepository, 'save')
+        .mockResolvedValue(savedUserData);
+      const result = await usersService.create(createUserData);
+      expect(usersRepositoryCreateSpy).toBeCalledWith(createUserData);
+      expect(usersRepositorySaveSpy).toBeCalledWith(savedUserData);
+      expect(result).toEqual(savedUserData);
+    });
+  });
 });
