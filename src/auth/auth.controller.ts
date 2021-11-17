@@ -9,7 +9,6 @@ import { ResponseStatuses } from './auth.constants';
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly userService: UsersService,
   ) {}
 
   @HttpCode(200)
