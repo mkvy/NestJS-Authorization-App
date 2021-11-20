@@ -3,7 +3,8 @@ import { AuthService } from '../auth.service';
 import { Test } from '@nestjs/testing';
 import { RegisterDto } from '../dto/register.dto';
 import { ResponseStatuses } from '../auth.constants';
-import { JwtAuthGuard } from '../guards/JwtAuthGuard';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { mockedJwtAuthGuard } from '../../utils/mocks/JwtAuthGuard';
 
 describe('Auth Controller tests', () => {
   let authController: AuthController;
@@ -22,7 +23,7 @@ describe('Auth Controller tests', () => {
       ],
     })
       .overrideGuard(JwtAuthGuard)
-      .useValue([])
+      .useValue(mockedJwtAuthGuard)
       .compile();
     authController = module.get<AuthController>(AuthController);
     authService = module.get<AuthService>(AuthService);
